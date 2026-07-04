@@ -660,6 +660,11 @@ async function handleApi(req, res) {
       if (!selectedHook.trim()) {
         return sendJson(res, 400, { error: "使用するフックを選ぶか、自作フックを入力してください。" });
       }
+      if (trialMode) {
+        return sendJson(res, 403, {
+          error: "体験版は冒頭30秒フックの作成までです。10分動画LP台本、AIアバター用原稿、スライド構成、スライド画像プロンプトは完全版で作成できます。"
+        });
+      }
       consumeTrial(req, res, "memos");
       const result = await callProWithRepair({ productInfo, imageDataUrl, selectedHook, hooksSummary });
       return sendJson(res, 200, {
