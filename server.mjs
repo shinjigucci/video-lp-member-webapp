@@ -695,8 +695,13 @@ async function serveStatic(req, res) {
     return res.end("Forbidden");
   }
   try {
-    const data = await fs.readFile(filePath);
     const ext = path.extname(filePath).toLowerCase();
+    let data = await fs.readFile(filePath);
+    if (trialMode && ext === ".html") {
+      data = Buffer.from(String(data)
+        .replaceAll("10分動画LP台本メーカー Pro", "10分動画LP台本メーカー 体験版")
+        .replaceAll("10分動画LP台本メーカー 完全版", "10分動画LP台本メーカー 体験版"));
+    }
     res.writeHead(200, { "content-type": mimeTypes[ext] || "application/octet-stream" });
     res.end(data);
   } catch {
