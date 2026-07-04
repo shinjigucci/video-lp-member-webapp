@@ -1,6 +1,7 @@
 import http from "node:http";
 import fs from "node:fs/promises";
 import path from "node:path";
+import crypto from "node:crypto";
 import { fileURLToPath } from "node:url";
 
 const __dirname = path.dirname(fileURLToPath(import.meta.url));
@@ -18,6 +19,10 @@ for (const candidate of publicDirCandidates) {
 const port = Number(process.env.PORT || 8788);
 const model = process.env.OPENAI_MODEL || "gpt-4.1";
 const memberAccessCode = String(process.env.MEMBER_ACCESS_CODE || "").trim();
+const trialMode = String(process.env.TRIAL_MODE || "").toLowerCase() === "true";
+const trialHookLimit = Number(process.env.TRIAL_HOOK_LIMIT || 1);
+const trialMemoLimit = Number(process.env.TRIAL_MEMO_LIMIT || 1);
+const trialUsage = new Map();
 let runtimeApiKey = "";
 
 const mimeTypes = {
@@ -62,9 +67,41 @@ function parseCookies(req) {
 }
 
 function hasMemberAccess(req) {
+  if (trialMode) return true;
   if (!memberAccessCode) return true;
   const cookies = parseCookies(req);
   return cookies.video_lp_member === memberAccessCode;
+}
+
+function ensureTrialId(req, res) {
+  const cookies = parseCookies(req);
+  if (cookies.video_lp_trial) return cookies.video_lp_trial;
+  const id = crypto.randomUUID();
+  const cookie = `video_lp_trial=${encodeURIComponent(id)}; HttpOnly; SameSite=Lax; Path=/; Max-Age=${60 * 60 * 24 * 365}`;
+  res.setHeader("set-cookie", cookie);
+  return id;
+}
+
+function getTrialBucket(req, res) {
+  const id = ensureTrialId(req, res);
+  if (!trialUsage.has(id)) {
+    trialUsage.set(id, { hooks: 0, memos: 0 });
+  }
+  return trialUsage.get(id);
+}
+
+function consumeTrial(req, res, kind) {
+  if (!trialMode) return;
+  const bucket = getTrialBucket(req, res);
+  const limit = kind === "hooks" ? trialHookLimit : trialMemoLimit;
+  if (bucket[kind] >= limit) {
+    const err = new Error(kind === "hooks"
+      ? "体験版のフック生成は1回までです。完全版では繰り返し生成できます。"
+      : "体験版の台本生成は1回までです。完全版では繰り返し生成できます。");
+    err.status = 429;
+    throw err;
+  }
+  bucket[kind] += 1;
 }
 
 function sendLoginPage(res, error = "") {
@@ -579,6 +616,14 @@ async function handleApi(req, res) {
       return sendJson(res, 401, { error: "会員ログインが必要です。" });
     }
 
+    if (req.url === "/api/trial-status") {
+      return sendJson(res, 200, {
+        trialMode,
+        hookLimit: trialHookLimit,
+        memoLimit: trialMemoLimit
+      });
+    }
+
     const payload = await readJson(req);
 
     if (req.url === "/api/set-key") {
@@ -602,6 +647,7 @@ async function handleApi(req, res) {
       if (!productInfo.trim() && !imageDataUrl) {
         return sendJson(res, 400, { error: "商品情報またはLP画像を入力してください。" });
       }
+      consumeTrial(req, res, "hooks");
       const result = await callOpenAI({
         taskPrompt: hookPrompt,
         content: buildContent({ productInfo, imageDataUrl })
@@ -614,6 +660,7 @@ async function handleApi(req, res) {
       if (!selectedHook.trim()) {
         return sendJson(res, 400, { error: "使用するフックを選ぶか、自作フックを入力してください。" });
       }
+      consumeTrial(req, res, "memos");
       const result = await callProWithRepair({ productInfo, imageDataUrl, selectedHook, hooksSummary });
       return sendJson(res, 200, {
         ...result,
