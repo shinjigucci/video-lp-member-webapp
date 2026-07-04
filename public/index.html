@@ -1,0 +1,126 @@
+<!doctype html>
+<html lang="ja">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>10分動画LP台本メーカー 完全版</title>
+  <link rel="stylesheet" href="./styles.css">
+</head>
+<body>
+  <main class="app">
+    <section class="hero">
+      <div>
+        <p class="eyebrow">10分動画LP台本メーカー Pro</p>
+        <h1>商品情報やLP画像から、10分動画LPの制作物を一気に作る</h1>
+        <p class="lead">100個の冒頭30秒フック、3,500〜4,000文字の10分動画LPフル台本、AIアバター用原稿、50〜60枚のスライド構成、1枚ずつGPTにコピペできるスライド生成プロンプトまで作成します。</p>
+      </div>
+      <div class="status-card">
+        <span class="dot"></span>
+        <strong>完全版の範囲</strong>
+        <p>フック選択後に、フル台本、AIアバター原稿、読み注意メモ、50枚以上のスライド構成、動画化前チェックリストまで作成します。</p>
+      </div>
+    </section>
+
+    <section class="panel key-panel">
+      <div class="panel-head">
+        <h2>APIキー設定</h2>
+        <p id="keyStatus">確認中...</p>
+      </div>
+      <div class="key-row">
+        <label class="field">
+          <span>OpenAI APIキー</span>
+          <input id="apiKey" type="password" placeholder="sk-...">
+        </label>
+        <button id="saveKey" class="secondary" type="button">APIキーを設定</button>
+      </div>
+      <p class="note">入力したAPIキーは、このローカルサーバーのメモリにだけ保持されます。ファイルには保存しません。</p>
+    </section>
+
+    <section class="panel input-panel">
+      <div class="panel-head">
+        <h2>1. 入力</h2>
+        <p>商品情報を入力するか、LP画像をアップロードしてください。</p>
+      </div>
+
+      <label class="field">
+        <span>商品情報</span>
+        <textarea id="productInfo" rows="11" placeholder="例: 商品名、対象者、悩み、無料オファー、登録後の流れ、提供者情報、講座内容、CTAなど"></textarea>
+      </label>
+
+      <div class="upload-row">
+        <label class="file-box">
+          <input id="imageInput" type="file" accept="image/*">
+          <span>LP画像を選択</span>
+          <small>スクリーンショット、画像LP、オプトインLP画像など</small>
+        </label>
+        <div id="previewWrap" class="preview-wrap hidden">
+          <img id="preview" alt="LP画像プレビュー">
+          <button id="removeImage" type="button" class="ghost">画像を外す</button>
+        </div>
+      </div>
+
+      <div class="actions">
+        <button id="generateHooks" class="primary" type="button">冒頭30秒フックを100案作る</button>
+        <button id="sampleFill" class="secondary" type="button">サンプル入力</button>
+      </div>
+    </section>
+
+    <section class="panel custom-hook-panel">
+      <div class="panel-head">
+        <h2>自作フックから作る</h2>
+        <p>自分で作った冒頭フックがある場合は、100案生成を飛ばして完全版を作れます。</p>
+      </div>
+      <label class="field">
+        <span>自作フック</span>
+        <textarea id="customHook" rows="5" placeholder="例: 2026年、マーケティングに動画を使えない人は厳しくなります。これは動画編集の話ではありません。広告やSNSから来た人に、登録前に価値を理解してもらう導線の話です。"></textarea>
+      </label>
+      <div class="actions">
+        <button id="generateFromCustomHook" class="primary" type="button">自作フックで完全版を作る</button>
+      </div>
+    </section>
+
+    <section id="hooksPanel" class="panel hidden">
+      <div class="panel-head">
+        <h2>2. フック選択</h2>
+        <p>おすすめTOP10から選ぶか、型別100案から選んでください。選択後に完全版制作物を作成します。</p>
+      </div>
+
+      <div id="extracted" class="extracted"></div>
+      <h3>おすすめTOP10</h3>
+      <div id="top10" class="hook-grid"></div>
+
+      <details class="all-hooks">
+        <summary>型別100案を見る</summary>
+        <div id="byType" class="by-type"></div>
+      </details>
+
+      <div class="selected-box">
+        <label class="field">
+          <span>選択中のフック</span>
+          <textarea id="selectedHook" rows="5" placeholder="使いたいフックを選ぶとここに入ります。直接編集もできます。"></textarea>
+        </label>
+        <button id="generateMemo" class="primary" type="button">完全版を作る</button>
+      </div>
+    </section>
+
+    <section id="memoPanel" class="panel hidden">
+      <div class="panel-head">
+        <h2>3. 完全版出力</h2>
+        <p>フル台本、AIアバター原稿、スライド構成、1枚ずつのスライド生成プロンプトを確認できます。</p>
+      </div>
+      <div id="memoOutput" class="memo-output"></div>
+      <div class="actions">
+        <button id="copyMemo" class="secondary" type="button">コピー</button>
+        <button id="downloadMemo" class="secondary" type="button">テキスト保存</button>
+      </div>
+    </section>
+  </main>
+
+  <div id="loading" class="loading hidden">
+    <div class="spinner"></div>
+    <p>生成中です。完全版は50枚以上のスライドまで作るため、少し時間がかかります。</p>
+  </div>
+
+  <script src="./app.js"></script>
+</body>
+</html>
