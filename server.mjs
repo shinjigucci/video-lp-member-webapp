@@ -4,7 +4,17 @@ import path from "node:path";
 import { fileURLToPath } from "node:url";
 
 const __dirname = path.dirname(fileURLToPath(import.meta.url));
-const publicDir = path.join(__dirname, "public");
+const publicDirCandidates = [path.join(__dirname, "public"), path.join(__dirname, "公共")];
+let publicDir = publicDirCandidates[0];
+for (const candidate of publicDirCandidates) {
+  try {
+    await fs.access(candidate);
+    publicDir = candidate;
+    break;
+  } catch {
+    // Try the next candidate. GitHub's translated UI can create "公共".
+  }
+}
 const port = Number(process.env.PORT || 8788);
 const model = process.env.OPENAI_MODEL || "gpt-4.1";
 const memberAccessCode = String(process.env.MEMBER_ACCESS_CODE || "").trim();
