@@ -1,0 +1,13 @@
+services:
+  - type: web
+    name: video-lp-member-webapp
+    runtime: node
+    buildCommand: npm install
+    startCommand: npm start
+    envVars:
+      - key: OPENAI_API_KEY
+        sync: false
+      - key: MEMBER_ACCESS_CODE
+        sync: false
+      - key: OPENAI_MODEL
+        value: gpt-4.1
