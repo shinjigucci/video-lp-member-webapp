@@ -181,13 +181,23 @@ function renderMemo(data) {
   memoText = buildMemoText(data);
 
   const scriptLabels = {
-    openingHook: "1. 冒頭30秒フック",
-    problem: "2. 問題提起",
-    beliefShift: "3. 常識破壊",
-    solution: "4. 新しい解決策",
-    proof: "5. 根拠と信頼",
-    simulation: "6. 疑似体験",
-    cta: "7. 登録CTA"
+    promiseHook: "1. 成果約束フック",
+    beliefBreak: "2. 常識破壊",
+    realProblem: "3. 問題の正体",
+    namedSolution: "4. 独自名称つき新解決策",
+    analogy: "5. 日常比喩",
+    caseStory: "6. 事例変化ストーリー",
+    futureSimulation: "7. できる未来の疑似体験",
+    proofTrust: "8. 根拠・信頼・再現性",
+    freeOfferAction: "9. 無料特典と次の行動",
+    philosophyClose: "10. 思想化と限定クロージング",
+    openingHook: "旧: 冒頭30秒フック",
+    problem: "旧: 問題提起",
+    beliefShift: "旧: 常識破壊",
+    solution: "旧: 新しい解決策",
+    proof: "旧: 根拠と信頼",
+    simulation: "旧: 疑似体験",
+    cta: "旧: 登録CTA"
   };
 
   els.memoOutput.innerHTML = `
@@ -195,8 +205,8 @@ function renderMemo(data) {
       <p><b>選択したフック</b><br>${escapeHtml(data.selectedHook || "")}</p>
       <p><b>想定対象者</b><br>${escapeHtml(data.assumedAudience || "")}</p>
       <p><b>動画の目的</b><br>${escapeHtml(data.videoGoal || "")}</p>
-      <p><b>フル台本文字数</b><br>${escapeHtml(fullScriptLength)}文字 / 目標 3,500〜4,000文字</p>
-      <p><b>AIアバター原稿文字数</b><br>${escapeHtml(avatarLength)}文字 / 目標 3,500〜4,000文字</p>
+      <p><b>フル台本文字数</b><br>${escapeHtml(fullScriptLength)}文字 / 目標 3,700〜4,300文字</p>
+      <p><b>AIアバター原稿文字数</b><br>${escapeHtml(avatarLength)}文字 / 目標 3,700〜4,300文字</p>
       <p><b>スライド枚数</b><br>${escapeHtml(slides.length)}枚 / 最低50枚</p>
     </div>
     ${Object.entries(data.fullScript || {}).map(([key, value]) => `
