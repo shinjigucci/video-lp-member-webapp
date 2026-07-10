@@ -41,6 +41,44 @@ function setMessage(text, isError = false) {
   $("message").style.color = isError ? "#b91c1c" : "#64748b";
 }
 
+function renderHooks(hooks) {
+  const list = $("hooksList");
+  list.innerHTML = "";
+  if (!hooks.length) {
+    list.innerHTML = '<p class="hint">フックを取得できませんでした。もう一度生成してください。</p>';
+    return;
+  }
+  for (const item of hooks) {
+    const card = document.createElement("div");
+    card.className = "hookCard";
+
+    const title = document.createElement("div");
+    title.className = "hookMeta";
+    title.textContent = `${item.id || ""} / ${item.type || ""}`;
+
+    const body = document.createElement("p");
+    body.textContent = item.hook || "";
+
+    const reason = document.createElement("small");
+    reason.textContent = item.reason || "";
+
+    const btn = document.createElement("button");
+    btn.type = "button";
+    btn.textContent = "このフックを使う";
+    btn.addEventListener("click", () => {
+      selectedHook = item.hook || "";
+      $("customHook").value = "";
+      $("selectedHookPreview").textContent = `選択中のフック: ${selectedHook}`;
+      document.querySelectorAll(".hookCard").forEach(el => el.classList.remove("active"));
+      card.classList.add("active");
+      setMessage("フックを選択しました。次に台本生成・採点へ進めます。");
+    });
+
+    card.append(title, body, reason, btn);
+    list.appendChild(card);
+  }
+}
+
 $("saveKeyBtn").addEventListener("click", async () => {
   try {
     const apiKey = $("apiKey").value.trim();
@@ -53,76 +91,59 @@ $("saveKeyBtn").addEventListener("click", async () => {
   }
 });
 
-function renderHooks(hooks) {
-  const list = $("hooksList");
-  list.innerHTML = "";
-  if (!hooks.length) {
-    list.innerHTML = '<p class="hint">フックを取得できませんでした。もう一度生成してください。</p>';
-    return;
-  }
-  for (const item of hooks) {
-    const card = document.createElement("div");
-    card.className = "hookCard";
-    const title = document.createElement("div");
-    title.className = "hookMeta";
-    title.textContent = `${item.id || ""} / ${item.type || ""}`;
-    const body = document.createElement("p");
-    body.textContent = item.hook || "";
-    const reason = document.createElement("small");
-    reason.textContent = item.reason || "";
-    const btn = document.createElement("button");
-    btn.type = "button";
-    btn.textContent = "このフックを使う";
-    btn.addEventListener("click", () => {
-      selectedHook = item.hook || "";
-      $("customHook").value = "";
-      $("selectedHookPreview").textContent = `選択中のフック: ${selectedHook}`;
-      document.querySelectorAll(".hookCard").forEach(el => el.classList.remove("active"));
-      card.classList.add("active");
-      setMessage("フックを選択しました。次に台本生成へ進めます。");
-    });
-    card.append(title, body, reason, btn);
-    list.appendChild(card);
-  }
-}
-
 $("generateHooksBtn").addEventListener("click", async () => {
-  const btn = $("generateHooksBtn");
-  btn.disabled = true;
-  $("hooksList").innerHTML = '<p class="hint">100パターンのフックを生成中です...</p>';
-  setMessage("フック生成中です。少し時間がかかります。");
   try {
-    const result = await postJson("/api/generate-hooks", collectPayload());
-    generatedHooks = result.hooks || [];
+    setMessage("100パターンのフックを生成中です。30秒フックなので少し時間がかかります。");
+    $("generateHooksBtn").disabled = true;
+    const res = await postJson("/api/generate-hooks", collectPayload());
+    generatedHooks = res.hooks || [];
     renderHooks(generatedHooks);
-    setMessage(`フック生成完了。${generatedHooks.length}件`);
+    if (!generatedHooks.length && res.raw) $("output").textContent = res.raw;
+    setMessage(`${generatedHooks.length || 0}件のフックを生成しました。使いたいフックを選んでください。`);
   } catch (err) {
-    $("hooksList").innerHTML = "";
     setMessage(err.message, true);
   } finally {
-    btn.disabled = false;
+    $("generateHooksBtn").disabled = false;
   }
 });
 
 $("generateBtn").addEventListener("click", async () => {
-  const btn = $("generateBtn");
-  const hook = $("customHook").value.trim() || selectedHook;
-  if (!hook) {
-    setMessage("先に100フックから選ぶか、自作フックを入力してください。", true);
-    return;
-  }
-  btn.disabled = true;
-  $("output").textContent = "生成中です。強いフック、採点、改善案まで作っています...";
-  setMessage("生成中です。長文なので少し時間がかかります。");
   try {
-    const result = await postJson("/api/generate", collectPayload());
-    $("output").textContent = result.text || "出力が空でした。";
-    setMessage(`生成完了。${result.model || ""}`);
+    const payload = collectPayload();
+    if (!payload.selectedHook) {
+      setMessage("先にフックを選ぶか、自作フックを入力してください。", true);
+      return;
+    }
+    setMessage("台本と採点結果を生成中です。");
+    $("generateBtn").disabled = true;
+    const res = await postJson("/api/generate", payload);
+    $("output").textContent = res.text || "";
+    setMessage("台本と採点結果を生成しました。");
   } catch (err) {
-    $("output").textContent = "";
     setMessage(err.message, true);
   } finally {
-    btn.disabled = false;
+    $("generateBtn").disabled = false;
+  }
+});
+
+$("improveBtn").addEventListener("click", async () => {
+  try {
+    const payload = collectPayload();
+    payload.currentText = $("output").textContent;
+    payload.improvePrompt = $("improvePrompt").value.trim();
+    if (!payload.currentText || payload.currentText.includes("ここに台本")) {
+      setMessage("先に台本を生成してください。", true);
+      return;
+    }
+    setMessage("改善版を生成中です。");
+    $("improveBtn").disabled = true;
+    const res = await postJson("/api/improve", payload);
+    $("output").textContent = res.text || "";
+    setMessage("改善版を生成しました。");
+  } catch (err) {
+    setMessage(err.message, true);
+  } finally {
+    $("improveBtn").disabled = false;
   }
 });
 
@@ -131,34 +152,19 @@ $("copyBtn").addEventListener("click", async () => {
   setMessage("コピーしました。");
 });
 
-$("downloadBtn").addEventListener("click", () => {
-  const blob = new Blob([$("output").textContent], { type: "text/markdown;charset=utf-8" });
-  const url = URL.createObjectURL(blob);
-  const a = document.createElement("a");
-  a.href = url;
-  a.download = `impact-video-lp-script-${new Date().toISOString().slice(0,10)}.md`;
-  a.click();
-  URL.revokeObjectURL(url);
-});
-
 $("sampleBtn").addEventListener("click", () => {
   $("productName").value = "10分動画LP広告マーケター養成講座";
   $("audience").value = "講座、コンサル、スクール、セミナー、個別相談型の商品を販売していて、広告やSNSからLINE登録・セミナー申込を増やしたい人";
-  $("pain").value = "文字LPや静止画広告の反応が落ちている。LINE登録は取れても質が低い。セミナー申込が取れても当日来ない。個別相談につながっても成約しない。";
-  $("future").value = "10分動画LPを使って、広告やSNSから本気度の高い見込み客を集め、LINE登録、セミナー申込、個別相談まで進む導線を作る。";
+  $("pain").value = "文字だけのLPでは反応が弱い。LINE登録は取れても質が低い。セミナー申込が取れても当日来ない。個別相談につながっても成約しない。広告費を増やす前に何を直せばいいか分からない。";
+  $("future").value = "Claude CodeやAIを使って、10分動画LP、広告クリエイティブ、LINE登録、セミナー申込までの導線を作れるようになる。";
   $("destination").value = "LINE登録、無料セミナー申込、個別相談";
   $("bonusName").value = "2026年版 10分動画LPスターターキット";
-  $("proof").value = "柳井社長のプロデュース実績として、Meta広告・YouTube広告の比較、広告費、CPA、ROAS、セミナー出席率などを使ってよい。数字は入力されたものだけ使う。";
-  $("keywords").value = "10分動画LP, Claude Code, 動画LP, 広告, LINE登録, セミナー申込";
-  $("analogy").value = "ジャパネットたかたのように、同じ商品でも文字ではなく動画で魅せると感情が動く。初めて入る美容室の案内不足の例。";
-  $("avoid").value = "無料AIツールだけで全部完結、絶対に売れる、誰でも成功、実績の捏造、動画編集者を育てる講座という表現";
-  $("memo").value = "赤間さん型のように、強い冒頭、数字、痛み、事例、反論処理、限定CTAを入れる。90点未満なら改善版も出す。";
-  $("customHook").value = "";
-  selectedHook = "";
-  generatedHooks = [];
-  $("selectedHookPreview").textContent = "選択中のフック: なし";
-  $("hooksList").innerHTML = "";
-  setMessage("サンプルを入力しました。");
+  $("proof").value = "柳井社長のプロデュース実績として、年間広告費6000万円規模の検証、YouTube広告ROAS1000%、Meta広告ROAS600%、動画導線でセミナー出席率が1.5倍から2倍になった事例を使ってよい。";
+  $("keywords").value = "10分動画LP, Claude Code, 動画LP, 広告, LINE登録, セミナー申込, AI, 自動化";
+  $("analogy").value = "ジャパネットたかたのように、同じ商品でも文字ではなく動画で魅せると感情が動く。初めて入る美容室で案内がないと不安になる例。";
+  $("avoid").value = "絶対に売れる、誰でも成功、実績の捏造、無料AIツールだけで全部完結、動画編集者を育てる講座という表現";
+  $("memo").value = "冒頭に強い数字を出す。見込み客の本音をセリフで入れる。本当の問題は広告画像やLPデザインではなく、登録前の理解と信頼が足りないことだと伝える。";
+  setMessage("サンプルを入力しました。100フック生成へ進めます。");
 });
 
 refreshStatus();

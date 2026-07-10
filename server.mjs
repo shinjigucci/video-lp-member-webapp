@@ -21,97 +21,49 @@ const mimeTypes = {
 };
 
 const systemPrompt = `
-あなたは「インパクト型10分動画LP台本メーカー兼採点官」です。
+あなたは「インパクト型10分動画LP台本メーカー兼採点者」です。
+講座、コンサル、スクール、セミナー、個別相談型ビジネス向けに、広告やSNSからLINE登録、セミナー申込、個別相談へつなげる10分動画LP台本を作ります。
 
-目的は、講座・コンサル・スクール・セミナー・個別相談型ビジネス向けに、広告やSNSからLINE登録・セミナー申込・個別相談へつなげる10分動画LP台本を作ることです。
-
-普通の説明台本ではなく、冒頭で手を止め、痛みを刺し、常識を壊し、実績・事例・データで信頼を作り、最後に無料特典やセミナー申込へ行動させる台本を作ってください。
+目的は、きれいな説明文ではなく、広告で手を止め、続きを見たくなり、登録前の不信感を消し、無料特典またはセミナー申込へ自然に進ませる台本を作ることです。
 
 重要ルール:
-- 実績、数字、受講生成果、広告費、CPA、ROAS、改善率は、ユーザーが入力したものだけ使う。
-- 入力されていない実績は作らない。
-- 柳井社長のプロデュース実績として使ってよい数字は、その旨を明記して使う。
-- 「必ず稼げる」「絶対成功」などの断定は禁止。
-- 「無料AIツールだけで全部完結」と断定しない。
-- この講座は動画編集者を育てる講座ではなく、10分動画LPの台本・構成・絵コンテ・編集指示・広告導線を設計できる広告マーケターを育てる講座として扱う。
+- 実績、数字、CPA、ROAS、比較データ、受講生成果は、ユーザーが入力したものだけ使う。
+- 入力されていない実績や数字は作らない。
+- ただし「柳井社長のプロデュース実績として使ってよい」と明記された数字は、その旨を添えて使う。
+- 「必ず稼げる」「絶対に売れる」などの断定保証は避ける。
+- 無料AIツールだけで全部完結など、実際とズレる断定はしない。
+- 動画編集講座ではなく、動画LP台本、構成、Bロール指示、広告導線を設計できる広告マーケター養成の文脈で扱う。
+- 出力は日本語で、広告向けに強い言葉を使うが、誇大表現にはしない。
 
-台本は必ず以下の5ゾーンで作る。
+台本は必ず以下の10段階構造で作る。
+1. 強い冒頭フック
+2. 見込み客の痛みと言語化
+3. 最後まで見る理由
+4. 時代背景と常識破壊
+5. 本当の問題の提示
+6. 新しい解決策
+7. 根拠、データ、事例
+8. 反論処理
+9. 無料特典の価値
+10. 限定性とCTA
 
-ZONE 1: フック
-- 常識破壊の一言
-- 実績や数字の先出し
-- 見込み客の痛み
-- この動画を見る理由
-
-ZONE 2: 問題の背景
-- AI時代の情報過多
-- 文章LP・静止画広告が弱くなった理由
-- 見込み客の本音
-- 「どうせ売り込まれるだけ」「無料特典なんて薄い」などのセリフ体
-
-ZONE 3: 解決策
-- 10分動画LPとは何か
-- 文章LPとの違い
-- 安心感・共感・納得感が生まれる理由
-- 事例、比喩、データ
-- 10分見た人だけが次に進む設計
-
-ZONE 4: 反論処理
-必ず以下を処理する。
-- 顔出しが怖い
-- 台本が書けない
-- 動画編集ができない
-- 時間がない
-- 費用が高そう
-
-ZONE 5: 特典・CTA
-- 無料特典名
-- 特典の中身
-- 受け取ると何ができるか
-- 限定性
-- 即時性
-- LINE登録CTA
-
-出力形式:
-1. 台本の狙い
-2. 完成台本
-3. 採点結果
-4. 改善ポイント
-5. 90点未満の場合の改善版
-
-採点は必ず100点満点で行う。
-
-採点項目:
-- フック力: 20点
+採点は100点満点で行う。
+- 冒頭フック: 20点
 - 痛みの解像度: 15点
-- 常識破壊・意外性: 15点
-- 解決策の信頼性・独自性: 15点
-- 疑似体験・具体性: 10点
+- 常識破壊と意外性: 15点
+- 解決策の信頼性と独自性: 15点
+- 疑似体験と具体性: 10点
 - 反論処理: 10点
 - 特典の魅力: 10点
 - CTA: 5点
 
-採点表の形式:
-| 観点 | 満点 | 得点 | 評価 | 改善方針 |
-
 評価基準:
 90点以上: 広告投入候補
-80〜89点: 改善すれば使用可能
-70〜79点: 大幅改善が必要
+80から89点: 改善すれば使用可能
+70から79点: 大幅改善が必要
 69点以下: 作り直し
 
-90点未満の場合は、必ず改善版台本を作る。
-
-改善版では以下を優先する。
-1. 冒頭に数字、実績、競合比較、強い断言を入れる
-2. 見込み客の本音をセリフ体で増やす
-3. 「本当の問題はそこではありません」を入れる
-4. 解決策の独自性を強める
-5. 実績や事例を前半に移動する
-6. 特典を「何ができるようになるか」で説明する
-7. CTAに限定性、即時性、損失回避を入れる
-
-出力は日本語のMarkdownにする。
+90点未満の場合は、最後に90点以上にするための修正案を必ず出す。
 `.trim();
 
 function sendJson(res, status, data) {
@@ -132,24 +84,15 @@ async function readJson(req) {
   return JSON.parse(body || "{}");
 }
 
-function buildUserPrompt(payload) {
+function baseInfo(payload) {
   return `
-以下の情報をもとに、インパクト型10分動画LP台本を作成し、100点満点で採点してください。
-
-最重要:
-ユーザーが選択または入力した以下のフックを、ZONE 1の冒頭フックとして必ず使ってください。
-必要な場合は自然に整えてよいですが、主張の方向性は変えないでください。
-
-選択フック:
-${payload.selectedHook || "未指定"}
-
-商品名・講座名:
+商品名または講座名:
 ${payload.productName || ""}
 
 誰に向けた商品か:
 ${payload.audience || ""}
 
-見込み客が今困っていること:
+見込み客の悩み:
 ${payload.pain || ""}
 
 見込み客が欲しい未来:
@@ -161,13 +104,13 @@ ${payload.destination || ""}
 無料特典名:
 ${payload.bonusName || ""}
 
-使ってよい実績・数字・事例:
+使ってよい実績、数字、事例:
 ${payload.proof || ""}
 
 使いたいキーワード:
 ${payload.keywords || ""}
 
-入れたい比喩・事例:
+入れたい比喩、事例:
 ${payload.analogy || ""}
 
 避けたい表現:
@@ -175,28 +118,21 @@ ${payload.avoid || ""}
 
 追加メモ:
 ${payload.memo || ""}
-
-文字数目安:
-${payload.lengthMode || "10分動画向け。3500〜4500文字を目安にする。"}
 `.trim();
 }
 
 function buildHookPrompt(payload) {
   return `
-以下の商品情報をもとに、インパクト型10分動画LPの冒頭フックを100パターン作成してください。
-
-目的:
-広告やSNSから来た見込み客の手を止め、10分動画LPを最後まで見る理由を作ること。
+以下の商品情報をもとに、インパクト型10分動画LPの冒頭30秒フックを100パターン作ってください。
 
 条件:
-- 100パターン出す
-- 1フックあたり、実際に動画冒頭30秒で話せる長さにする
-- 目安は120〜220文字
-- 短いキャッチコピーだけで終わらせない
-- 強い断言、数字、競合比較、見込み客の本音、常識破壊、損失回避を使う
-- 実績や数字はユーザーが入力したものだけ使う
-- 捏造しない
-- 10タイプに分け、各タイプ10個ずつ出す
+- 10タイプに分け、各タイプ10個ずつ出す。
+- 1フックは120から220文字程度。
+- 実際に動画の冒頭30秒で話せる長さにする。
+- 短いキャッチコピーだけで終わらせない。
+- 強い一言、数字、競合比較、見込み客の本音、常識破壊、損失回避を使う。
+- 実績や数字は入力されたものだけ使う。
+- 出力は必ずJSONだけ。Markdownは不要。
 
 10タイプ:
 1. 常識破壊型
@@ -210,8 +146,7 @@ function buildHookPrompt(payload) {
 9. 事例・比喩型
 10. 限定・緊急型
 
-出力は必ずJSONだけにしてください。Markdownは不要です。
-形式:
+JSON形式:
 {
   "hooks": [
     {
@@ -223,38 +158,67 @@ function buildHookPrompt(payload) {
   ]
 }
 
-商品名・講座名:
-${payload.productName || ""}
+${baseInfo(payload)}
+`.trim();
+}
 
-誰に向けた商品か:
-${payload.audience || ""}
+function buildUserPrompt(payload) {
+  return `
+以下の情報をもとに、インパクト型10分動画LP台本を作成し、100点満点で採点してください。
 
-見込み客が今困っていること:
-${payload.pain || ""}
+最重要:
+ユーザーが選択または入力した以下のフックを、冒頭フックとして必ず使ってください。自然に整えてもよいですが、主張の方向性は変えないでください。
 
-見込み客が欲しい未来:
-${payload.future || ""}
+選択フック:
+${payload.selectedHook || "未指定"}
 
-最終的な誘導先:
-${payload.destination || ""}
+文字数目安:
+${payload.lengthMode || "10分動画向け。3500から4500文字を目安にする。"}
 
-無料特典名:
-${payload.bonusName || ""}
+出力形式:
+1. 台本の狙い
+2. 完成台本
+3. 採点結果
+4. 改善ポイント
+5. 90点未満の場合の改善版台本
 
-使ってよい実績・数字・事例:
-${payload.proof || ""}
+採点表は次の形式:
+| 観点 | 満点 | 得点 | 評価 | 改善方針 |
 
-使いたいキーワード:
-${payload.keywords || ""}
+${baseInfo(payload)}
+`.trim();
+}
 
-入れたい比喩・事例:
-${payload.analogy || ""}
+function buildImprovePrompt(payload) {
+  return `
+以下の台本と採点結果を、ユーザーの改善指示に従って、広告投入候補レベルまで改善してください。
 
-避けたい表現:
-${payload.avoid || ""}
+改善方針:
+- 冒頭のフックを強くする。
+- 見込み客の本音を増やす。
+- 「本当の問題はそこではありません」を明確に入れる。
+- 解決策の独自性を強める。
+- 実績や事例は入力済みのものだけ使う。
+- 特典を「何ができるようになるか」で説明する。
+- CTAに限定性、即時性、損失回避を入れる。
 
-追加メモ:
-${payload.memo || ""}
+ユーザーの改善指示:
+${payload.improvePrompt || ""}
+
+現在の台本、採点結果:
+${payload.currentText || ""}
+
+選択フック:
+${payload.selectedHook || ""}
+
+出力形式:
+1. 改善方針
+2. 改善版の完成台本
+3. 再採点表
+4. どこをどう改善したか
+5. さらに強くする追加提案
+
+${baseInfo(payload)}
 `.trim();
 }
 
@@ -287,6 +251,7 @@ async function callOpenAI(prompt) {
     body: JSON.stringify({
       model,
       temperature: 0.75,
+      max_output_tokens: 12000,
       input: [
         { role: "system", content: [{ type: "input_text", text: systemPrompt }] },
         { role: "user", content: [{ type: "input_text", text: prompt }] }
@@ -331,16 +296,18 @@ async function handleApi(req, res) {
     if (req.url === "/api/key-status") {
       return sendJson(res, 200, { hasKey: Boolean(runtimeApiKey || process.env.OPENAI_API_KEY), model });
     }
-    if (req.url === "/api/generate") {
-      const prompt = buildUserPrompt(payload);
-      const text = await callOpenAI(prompt);
-      return sendJson(res, 200, { text, model });
-    }
     if (req.url === "/api/generate-hooks") {
-      const prompt = buildHookPrompt(payload);
-      const text = await callOpenAI(prompt);
+      const text = await callOpenAI(buildHookPrompt(payload));
       const hooks = parseHooks(text);
       return sendJson(res, 200, { hooks, raw: text, model });
+    }
+    if (req.url === "/api/generate") {
+      const text = await callOpenAI(buildUserPrompt(payload));
+      return sendJson(res, 200, { text, model });
+    }
+    if (req.url === "/api/improve") {
+      const text = await callOpenAI(buildImprovePrompt(payload));
+      return sendJson(res, 200, { text, model });
     }
     return sendJson(res, 404, { error: "API not found" });
   } catch (error) {
@@ -348,7 +315,7 @@ async function handleApi(req, res) {
     const status = error.code === "NO_API_KEY" ? 400 : error.status || 500;
     return sendJson(res, status, {
       error: error.code === "NO_API_KEY"
-        ? "OpenAI APIキーが設定されていません。画面上部のAPIキー欄に入力するか、環境変数OPENAI_API_KEYを設定してください。"
+        ? "OpenAI APIキーが設定されていません。画面上部のAPIキー欄に入力するか、Renderの環境変数OPENAI_API_KEYを設定してください。"
         : error.message
     });
   }

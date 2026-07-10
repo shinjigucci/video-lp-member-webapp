@@ -11,7 +11,7 @@
     <div>
       <p class="eyebrow">Impact Script Maker</p>
       <h1>インパクト型10分動画LP台本メーカー</h1>
-      <p class="lead">広告で手を止めるフック、痛みの深掘り、実績訴求、反論処理、特典CTAまで。台本生成と100点採点を一気に行います。</p>
+      <p class="lead">広告で手を止める冒頭フック100案、10分動画LP台本、100点満点の採点、改善版まで一気に作ります。</p>
     </div>
     <div class="status">
       <span id="keyStatus">APIキー確認中</span>
@@ -31,7 +31,7 @@
         <input id="apiKey" type="password" placeholder="sk-...">
         <button id="saveKeyBtn" type="button">設定</button>
       </div>
-      <p class="hint">Renderに環境変数を入れている場合は空欄でOKです。ブラウザ保存はしません。</p>
+      <p class="hint">Renderに環境変数を入れている場合は空欄でOKです。入力したキーはサーバーの実行中メモリだけに保持されます。</p>
 
       <label>商品名・講座名</label>
       <input id="productName" value="10分動画LP広告マーケター養成講座">
@@ -39,10 +39,10 @@
       <label>誰に向けた商品か</label>
       <textarea id="audience">講座、コンサル、スクール、セミナー、個別相談型の商品を販売していて、広告やSNSからLINE登録・セミナー申込を増やしたい人</textarea>
 
-      <label>見込み客が今困っていること</label>
-      <textarea id="pain">文章LPや静止画広告の反応が落ちている。LINE登録は取れても質が低い。セミナー申込が取れても当日来ない。個別相談につながっても成約しない。</textarea>
+      <label>見込み客の悩み</label>
+      <textarea id="pain">文章LPや静止画広告の反応が弱い。LINE登録は取れても質が低い。セミナー申込が取れても当日来ない。個別相談につながっても成約しない。</textarea>
 
-      <label>欲しい未来</label>
+      <label>見込み客が欲しい未来</label>
       <textarea id="future">10分動画LPを使って、広告やSNSから本気度の高い見込み客を集め、LINE登録、セミナー申込、個別相談まで進む導線を作る。</textarea>
 
       <label>最終的な誘導先</label>
@@ -52,25 +52,25 @@
       <input id="bonusName" value="2026年版 10分動画LPスターターキット">
 
       <label>使ってよい実績・数字・事例</label>
-      <textarea id="proof">柳井社長のプロデュース実績として、Meta広告・YouTube広告の比較、広告費、CPA、ROAS、セミナー出席率などを使ってよい。数字は入力されたものだけ使う。</textarea>
+      <textarea id="proof">柳井社長のプロデュース実績として、LINE登録CPA、セミナー申込CPA、広告費、ROAS、出席率などの数字を使ってよい。数字は入力したものだけ使う。</textarea>
 
       <label>使いたいキーワード</label>
-      <input id="keywords" value="10分動画LP, Claude Code, 動画LP, 広告, LINE登録, セミナー申込">
+      <input id="keywords" value="10分動画LP, Claude Code, 動画LP, 広告, LINE登録, セミナー申込, 自動化">
 
       <label>入れたい比喩・事例</label>
       <textarea id="analogy">ジャパネットたかたのように、同じ商品でも文字ではなく動画で魅せると感情が動く。初めて入る美容室の案内不足の例。</textarea>
 
       <label>避けたい表現</label>
-      <textarea id="avoid">無料AIツールだけで全部完結、絶対に売れる、誰でも成功、実績の捏造、動画編集者を育てる講座という表現</textarea>
+      <textarea id="avoid">無料AIツールだけで全部完結、絶対に売れる、誰でも成功、実績の捏造、動画編集を育てる講座という表現</textarea>
 
       <label>追加メモ</label>
       <textarea id="memo">赤間さん型のように、強い冒頭、数字、痛み、事例、反論処理、限定CTAを入れる。90点未満なら改善版も出す。</textarea>
 
       <label>文字数</label>
       <select id="lengthMode">
-        <option>10分動画向け。3500〜4500文字を目安にする。</option>
-        <option>短め。2000〜2800文字を目安にする。</option>
-        <option>長め。4500〜5500文字を目安にする。</option>
+        <option>10分動画向け。3500から4500文字を目安にする。</option>
+        <option>短め。2000から2800文字を目安にする。</option>
+        <option>長め。4500から5500文字を目安にする。</option>
       </select>
 
       <div class="hookBox">
@@ -78,26 +78,31 @@
           <h2>2. フック選択</h2>
           <button id="generateHooksBtn" type="button">100フック生成</button>
         </div>
+
         <label>自作フック</label>
-        <textarea id="customHook" placeholder="自分で作ったフックを使う場合はここに入力。ここが入力されている場合は、選択フックより優先します。"></textarea>
-        <p class="hint">先に100パターンを出して選ぶか、自分でフックを入力してから台本生成へ進めます。</p>
-        <div id="selectedHookPreview" class="selectedHook">選択中のフック: なし</div>
+        <textarea id="customHook" placeholder="自分で作った冒頭フックを使う場合はここに入力。入力すると選択フックより優先されます。"></textarea>
+        <p id="selectedHookPreview" class="selectedHook">まだフックは選択されていません。</p>
         <div id="hooksList" class="hooksList"></div>
       </div>
-
-      <button id="generateBtn" class="primary" type="button">選んだフックで台本を生成して採点する</button>
-      <p id="message" class="message"></p>
     </section>
 
     <section class="panel outputPanel">
       <div class="panelHead">
-        <h2>2. 生成結果</h2>
+        <h2>3. 生成・採点</h2>
         <div class="actions">
+          <button id="generateBtn" type="button">台本生成・採点</button>
           <button id="copyBtn" type="button">コピー</button>
-          <button id="downloadBtn" type="button">保存</button>
         </div>
       </div>
-      <pre id="output">ここに台本、採点表、改善案が表示されます。</pre>
+      <p id="message" class="hint">まずは商品情報を入力し、100フック生成または自作フック入力から進めてください。</p>
+      <pre id="output">ここに台本と採点結果が表示されます。</pre>
+
+      <div class="improveBox">
+        <h2>4. 改善</h2>
+        <label>改善指示</label>
+        <textarea id="improvePrompt" placeholder="例: もっと冒頭を強く。数字を前半に出す。特典の価値を具体的に。"></textarea>
+        <button id="improveBtn" type="button">改善版を作る</button>
+      </div>
     </section>
   </main>
 
