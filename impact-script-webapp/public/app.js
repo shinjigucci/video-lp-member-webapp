@@ -126,6 +126,37 @@ $("generateBtn").addEventListener("click", async () => {
   }
 });
 
+$("improveBtn").addEventListener("click", async () => {
+  const btn = $("improveBtn");
+  const currentText = $("output").textContent.trim();
+  const improvePrompt = $("improvePrompt").value.trim();
+  if (!currentText || currentText.includes("ここに台本")) {
+    setMessage("先に台本を生成してから改善版を作ってください。", true);
+    return;
+  }
+  if (!improvePrompt) {
+    setMessage("改善指示プロンプトを入力してください。", true);
+    return;
+  }
+  btn.disabled = true;
+  $("output").textContent = `${currentText}\n\n---\n\n改善版を生成中です...`;
+  setMessage("改善版を生成中です。元の台本と採点結果をもとに作り直しています。");
+  try {
+    const result = await postJson("/api/improve", {
+      ...collectPayload(),
+      currentText,
+      improvePrompt
+    });
+    $("output").textContent = result.text || "改善版の出力が空でした。";
+    setMessage(`改善版生成完了: ${result.model || ""}`);
+  } catch (err) {
+    $("output").textContent = currentText;
+    setMessage(err.message, true);
+  } finally {
+    btn.disabled = false;
+  }
+});
+
 $("copyBtn").addEventListener("click", async () => {
   await navigator.clipboard.writeText($("output").textContent);
   setMessage("コピーしました。");

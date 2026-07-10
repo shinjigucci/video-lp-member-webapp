@@ -258,6 +258,60 @@ ${payload.memo || ""}
 `.trim();
 }
 
+function buildImprovePrompt(payload) {
+  return `
+以下は、すでに生成された10分動画LP台本と採点結果です。
+ユーザーの改善指示に従って、広告投入に耐えるレベルまで改善してください。
+
+改善の目的:
+- 冒頭のフックを強くする
+- 見込み客の痛みを深く言語化する
+- 常識破壊、数字、事例、反論処理を強化する
+- 特典とCTAを「今すぐ登録する理由」が分かる形にする
+- 誇大表現や捏造は避け、入力済みの実績だけを使う
+
+ユーザーの改善指示:
+${payload.improvePrompt || ""}
+
+元の選択フック:
+${payload.selectedHook || ""}
+
+元の台本・採点結果:
+${payload.currentText || ""}
+
+商品名・講座名:
+${payload.productName || ""}
+
+対象者:
+${payload.audience || ""}
+
+見込み客の悩み:
+${payload.pain || ""}
+
+欲しい未来:
+${payload.future || ""}
+
+無料特典名:
+${payload.bonusName || ""}
+
+使ってよい実績・数字・事例:
+${payload.proof || ""}
+
+避けたい表現:
+${payload.avoid || ""}
+
+出力形式:
+1. 改善方針
+2. 改善版の完成台本
+3. 再採点表
+4. どこをどう改善したか
+5. さらに強くするための追加提案
+
+採点は必ず100点満点で行ってください。
+90点未満の場合は、最後に「90点以上にするための修正案」を追加してください。
+`.trim();
+}
+
 function extractTextFromResponse(data) {
   if (typeof data.output_text === "string") return data.output_text;
   const chunks = [];
@@ -341,6 +395,11 @@ async function handleApi(req, res) {
       const text = await callOpenAI(prompt);
       const hooks = parseHooks(text);
       return sendJson(res, 200, { hooks, raw: text, model });
+    }
+    if (req.url === "/api/improve") {
+      const prompt = buildImprovePrompt(payload);
+      const text = await callOpenAI(prompt);
+      return sendJson(res, 200, { text, model });
     }
     return sendJson(res, 404, { error: "API not found" });
   } catch (error) {

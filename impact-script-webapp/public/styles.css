@@ -237,6 +237,20 @@ pre {
   color: #e5edf8;
   border: 1px solid #1f2a44;
 }
+.improveBox {
+  margin-top: 16px;
+  padding: 16px;
+  border: 2px solid #d8e1ee;
+  background: #f8fbff;
+}
+.improveBox textarea {
+  min-height: 120px;
+}
+.improveBox button {
+  background: #10233f;
+  color: #fff;
+  border-color: #10233f;
+}
 
 @media (max-width: 980px) {
   .hero { display: block; }
