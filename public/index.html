@@ -1,0 +1,145 @@
+<!doctype html>
+<html lang="ja">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>TP動画台本メーカー</title>
+  <link rel="stylesheet" href="/styles.css">
+</head>
+<body>
+  <header class="hero">
+    <div>
+      <p class="eyebrow">Seminar TP Script Maker</p>
+      <h1>TP動画台本メーカー</h1>
+      <p class="lead">登録直後のワンタイムオファーやLINEステップから、無料セミナー申込へ進ませる動画台本を作ります。</p>
+    </div>
+    <div class="status">
+      <span id="keyStatus">APIキー確認中</span>
+      <span id="modelStatus"></span>
+    </div>
+  </header>
+
+  <main class="layout">
+    <section class="panel">
+      <div class="panelHead">
+        <h2>1. TP情報</h2>
+        <button id="sampleBtn" type="button">サンプル</button>
+      </div>
+
+      <label>OpenAI APIキー</label>
+      <div class="keyRow">
+        <input id="apiKey" type="password" placeholder="sk-...">
+        <button id="saveKeyBtn" type="button">設定</button>
+      </div>
+      <p class="hint">Renderに環境変数を入れている場合は空欄でOKです。入力したキーはサーバーの実行中メモリだけに保持されます。</p>
+
+      <label>セミナー名</label>
+      <input id="seminarName" value="広告・SNSからLINE登録とセミナー申込を増やす 10分動画LP集客セミナー">
+
+      <label>オプトイン特典名</label>
+      <input id="optinBonus" value="2026年版 10分動画LPスターターキット">
+
+      <label>セミナー申込特典名</label>
+      <input id="signupBonus" value="コンセプト設計アプリ、深層共感キャッチコピー作成アプリ、オプトイン特典メーカー体験版">
+
+      <label>対象者</label>
+      <textarea id="audience">講座、コンサル、スクール、セミナー、個別相談型の商品を販売していて、広告やSNSからLINE登録・セミナー申込につながる導線を作りたい人</textarea>
+
+      <label>登録直後の見込み客の状態</label>
+      <textarea id="currentState">スターターキットを受け取った直後。10分動画LPの必要性は分かり始めているが、自分の商品にどう当てはめればいいかはまだ分からない。</textarea>
+
+      <label>見込み客が次に止まる理由</label>
+      <textarea id="stuckReason">必要なのは分かったが、自分の商品だと何を言えばいいのか、どんなコンセプトにすればいいのか、LP原稿や動画台本にどう変換すればいいのか分からない。</textarea>
+
+      <label>セミナーで約束すること</label>
+      <textarea id="promise">スターターキットで理解した10分動画LPの考え方を、自分の商品に当てはめ、広告やSNSからLINE登録、セミナー申込へつながる導線の作り方を理解できる。</textarea>
+
+      <label>セミナー内容</label>
+      <textarea id="agenda">なぜ直接セミナー申込ページに飛ばすと反応が弱くなるのか
+10分動画LPを講座・コンサル型商品に当てはめる方法
+Claude CodeやChatGPTを使ったコンセプト、キャッチコピー、LP原稿、動画台本の作り方
+冒頭30秒フックの作り方
+LINE登録後からセミナー申込までの導線設計</textarea>
+
+      <label>来てほしい人</label>
+      <textarea id="goodFit">自分の商品に10分動画LPを当てはめたい人
+広告やSNSからLINE登録、セミナー申込につなげたい人
+AIに課金し、実際に手を動かして導線を作る意思がある人
+聞いて終わりではなく、自分の商品で試したい人</textarea>
+
+      <label>来てほしくない人</label>
+      <textarea id="badFit">オンラインビジネスで売上を作りたいのに、必要なAIツールに課金するのが嫌な人
+集客はお金も時間もかけず完全無料でできると思っている人
+セミナーを聞いて満足するだけで、実際に作るつもりがない人</textarea>
+
+      <label>反論・不安</label>
+      <textarea id="objections">売り込まれるだけではないか
+自分の商品でも使えるのか
+動画編集ができないと無理ではないか
+AIを使いこなせないと難しいのではないか
+広告費が大きく必要なのではないか</textarea>
+
+      <label>使ってよい実績・数字・事例</label>
+      <textarea id="proof">柳井社長のプロデュース実績として、広告費、CPA、ROAS、セミナー出席率など入力した数字は使ってよい。入力されていない数字は作らない。</textarea>
+
+      <label>日程・限定性・締切</label>
+      <textarea id="urgency">日程を選んで席を確保してください。セミナー申込特典は申込者限定で案内します。</textarea>
+
+      <label>講師プロフィール</label>
+      <textarea id="profile">谷口慎治。AIと広告を活用した集客導線づくりを研究し、講座・コンサル・個別相談型ビジネス向けに10分動画LP、広告、LINE、セミナー導線の設計を支援。</textarea>
+
+      <label>CTA文言</label>
+      <input id="cta" value="下のボタンから日程を選んで、無料セミナーの席を確保してください。">
+
+      <label>使いたいキーワード</label>
+      <input id="keywords" value="10分動画LP, Claude Code, 広告, SNS, LINE登録, セミナー申込, 集客導線, 自動化">
+
+      <label>避けたい表現</label>
+      <textarea id="avoid">絶対に売れる、誰でも成功、実績の捏造、無料AIツールだけで全部完結、動画編集講座という表現</textarea>
+
+      <label>追加メモ</label>
+      <textarea id="memo">スターターキットは地図。無料セミナーは、その地図を自分の商品に当てはめる時間。セミナー申込特典の価値を強める。</textarea>
+
+      <label>文字数</label>
+      <select id="lengthMode">
+        <option>7分から10分動画向け。3000から4200文字を目安にする。</option>
+        <option>短め。2000から2800文字を目安にする。</option>
+        <option>長め。4200から5200文字を目安にする。</option>
+      </select>
+
+      <div class="hookBox">
+        <div class="panelHead compact">
+          <h2>2. フック選択</h2>
+          <button id="generateHooksBtn" type="button">100フック生成</button>
+        </div>
+
+        <label>自作フック</label>
+        <textarea id="customHook" placeholder="自分で作った冒頭フックを使う場合はここに入力。入力すると選択フックより優先されます。"></textarea>
+        <p id="selectedHookPreview" class="selectedHook">まだフックは選択されていません。</p>
+        <div id="hooksList" class="hooksList"></div>
+      </div>
+    </section>
+
+    <section class="panel outputPanel">
+      <div class="panelHead">
+        <h2>3. 生成・採点</h2>
+        <div class="actions">
+          <button id="generateBtn" type="button">TP台本生成・採点</button>
+          <button id="copyBtn" type="button">コピー</button>
+        </div>
+      </div>
+      <p id="message" class="hint">まずはTP情報を入力し、100フック生成または自作フック入力から進めてください。</p>
+      <pre id="output">ここにTP動画台本と採点結果が表示されます。</pre>
+
+      <div class="improveBox">
+        <h2>4. 改善</h2>
+        <label>改善指示</label>
+        <textarea id="improvePrompt" placeholder="例: もっとセミナー申込特典を魅力的に。来てほしくない人を強める。登録直後の心理を深くする。"></textarea>
+        <button id="improveBtn" type="button">改善版を作る</button>
+      </div>
+    </section>
+  </main>
+
+  <script src="/app.js"></script>
+</body>
+</html>
